@@ -22,7 +22,7 @@ const modalActions = document.querySelector(".modal-actions");
 const progressEl = document.querySelector("#progress");
 
 const postFeed = document.querySelector(".post-feed");
-// let selectedPostId = null;
+
 let selectedPostId = null;
 let editingPostId = null;
 let editingImageUrl = "";
@@ -155,7 +155,7 @@ sendButton.addEventListener("click", () => {
   const caption = captionInput.value.trim();
 
   if (editingPostId) {
-    // --- EDIT MODE ---
+    //  EDIT MODE First
     if (files.length > 0) {
       const file = files[0];
       const uniquePath = `posts/${user.uid}/${Date.now()}-${file.name}`;
@@ -188,7 +188,7 @@ sendButton.addEventListener("click", () => {
       redirectToApp();
     }
   } else {
-    // --- NORMAL UPLOAD ---
+    //  NORMAL UPLOAD 
     if (files.length === 0) return alert("No file chosen");
 
     for (let i = 0; i < files.length; i++) {
@@ -360,7 +360,7 @@ const renderPosts = () => {
     .orderBy("timestamp", "desc")
     .get()
     .then((querySnapshot) => {
-      postFeed.innerHTML = ""; // clear before rendering
+      postFeed.innerHTML = ""; // clearing the post feed before rendering
       querySnapshot.forEach((doc) => {
         const post = doc.data();
         const postElement = document.createElement("div");
@@ -454,7 +454,7 @@ function handleDelete(postId) {
       const post = doc.data();
       const imageUrl = post.imageUrl;
 
-      // First delete the Firestore document
+      // delete the Firestore document
       return db
         .collection("posts")
         .doc(postId)
@@ -464,7 +464,7 @@ function handleDelete(postId) {
           renderPosts(); // Refresh the feed
           document.querySelector(".modal").style.display = "none";
 
-          // Then delete the image from storage
+          // then deleting the image from storage
           if (imageUrl) {
             const imageRef = storage.refFromURL(imageUrl);
             return imageRef.delete().then(() => {
@@ -481,12 +481,12 @@ function handleDelete(postId) {
 
 function openEditPost(postId, imageUrl, caption) {
   createPostHandler()
-  // Pre-fill the form with existing data
+  // Pre-filling the form with existing data
   editingPostId = postId;
   editingImageUrl = imageUrl;
  captionInput.value = caption;
   
-  // Optional: show the existing image
+  // showing the existing image that needs an update
   const previewEl = document.getElementById("preview-image");
   if (previewEl) {
     previewEl.src = imageUrl;
