@@ -17,6 +17,8 @@ const captionInput = document.getElementById("caption");
 const modalButton = document.querySelector(".modal-button");
 const modal = document.querySelector(".modal");
 const closeButton = document.querySelector(".close-modal");
+const modalContent = document.querySelector(".modal-content");
+const modalActions = document.querySelector(".modal-actions");
 const progressEl = document.querySelector("#progress");
 
 const postFeed = document.querySelector(".post-feed");
@@ -24,6 +26,7 @@ const postFeed = document.querySelector(".post-feed");
 let selectedPostId = null;
 let editingPostId = null;
 let editingImageUrl = "";
+
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
@@ -114,7 +117,7 @@ const handleLogout = () => {
     })
     .catch((error) => {
       // An error happened.
-      console.log("An error has occured");
+      console.log("An error has occured", error.message);
     });
 };
 logOutButton.addEventListener("click", () => {
@@ -397,20 +400,18 @@ function openModal(postId, userId) {
   selectedPostId = postId;
   const currentUser = firebase.auth().currentUser;
 
+  modalActions.innerHTML= "";
+
   if (currentUser && currentUser.uid === userId) {
-    // Show "Delete" and "Edit"
-    document.getElementById("modal-action-1").innerText = "Delete";
-    document.getElementById("modal-action-2").innerText = "Edit";
+  const deleteBtn = document.createElement("span");
+  deleteBtn.innerText = "Delete";
+  deleteBtn.classList.add("red-text");
+  deleteBtn.onclick = () => handleDelete(postId);
 
-    document.getElementById("modal-action-1").classList.add("red-text");
-    document.getElementById("modal-action-2").classList.add("red-text");
-
-    // Setup Delete
-    document.getElementById("modal-action-1").onclick = () =>
-      handleDelete(postId);
-
-    // Fetch post data before editing
-    document.getElementById("modal-action-2").onclick = () => {
+  const editBtn = document.createElement("span");
+   editBtn.innerText = "Edit";
+   editBtn.classList.add("red-text");
+    editBtn.onclick = () => {
       db.collection("posts")
         .doc(postId)
         .get()
@@ -428,10 +429,9 @@ function openModal(postId, userId) {
           alert("Failed to load post data.");
         });
     };
-  } else {
-    // Show "Report" and "Unfollow"
-    document.getElementById("modal-action-1").innerText = "Report";
-    document.getElementById("modal-action-2").innerText = "Unfollow";
+
+    modalActions.appendChild(deleteBtn);
+    modalActions.appendChild(editBtn);
   }
 
   document.querySelector(".modal").style.display = "block";
@@ -480,18 +480,12 @@ function handleDelete(postId) {
 }
 
 function openEditPost(postId, imageUrl, caption) {
-  createPostHandler();
+  createPostHandler()
+  // Pre-fill the form with existing data
   editingPostId = postId;
   editingImageUrl = imageUrl;
-
-  // Show the post form
-  createpostElement.style.display = "block";
-  mainApp.style.display = "none";
-  firebaseAuthContainer.style.display = "none";
-
-  // Pre-fill caption
-  captionInput.value = caption;
-
+ captionInput.value = caption;
+  
   // Optional: show the existing image
   const previewEl = document.getElementById("preview-image");
   if (previewEl) {

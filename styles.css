@@ -435,8 +435,22 @@ main {
     border-bottom: 1px solid #ddd;
     color: black;
 }
+.modal-actions{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 258px;
+}
 .modal-content .red-text{
     color: red;
+    padding: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+
+  
 }
 .preview-image{
     display:none

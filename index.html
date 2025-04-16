@@ -39,7 +39,7 @@
         <h1>Create a new post</h1>
      <label for="input">Upload your image or video here</label>
      <input type="file" id="files" class="choose-file" multiple/><br />
-     <img id="preview-image">
+     <img id="preview-image" width="100px" height="100px" src="" alt="Preview" />
       <p id="uploading"></p>
       <progress value="0" max="100" id="progress"> </progress>
 
@@ -900,8 +900,9 @@
 
                 <div class="modal">
                     <div class="modal-content">
-                        <span id="modal-action-1" >Report</span>
-                        <span id="modal-action-2" >unfollow</span>
+                        <div class="modal-actions"></div>
+                        <span >Report</span>
+                        <span >unfollow</span>
                         <span>Go to post</span>
                         <span>Share to</span>
                         <span>Copy link</span>
