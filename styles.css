@@ -365,14 +365,14 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    border: 1px solid red;   
+    align-items: center;   
     width: 400px;
     /* margin: 200px 330px;  */
     margin-top: 20px;
-    background-color: #e03d67;
+    background-color: #546d9c;
     padding: 20px 0px;
     width:100vw;
+    color: whitesmoke;
 }
 .choose-file{
     padding-left: 80px;
