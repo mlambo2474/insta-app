@@ -232,6 +232,8 @@ sendButton.addEventListener("click", () => {
   }
 });
 
+
+
 function resetForm() {
   captionInput.value = "";
   usernameInput.value = "";
@@ -241,7 +243,7 @@ function resetForm() {
   editingPostId = null;
   editingImageUrl = null;
 }
-function generatePostHTML({ imageUrl, caption, username, postId, userId }) {
+function generatePostHTML({ imageUrl, caption, username, postId, userId, timestamp }) {
   return `
       <div class="post"  data-post-id="${postId}" data-user-id="${userId}">
         <div class="header">
@@ -345,7 +347,7 @@ function generatePostHTML({ imageUrl, caption, username, postId, userId }) {
             <span class="caption-username"><b>${username}</b></span>
             <span class="caption-text">${caption}</span>
           </span>
-          <span class="posted-time">Just now</span>
+          <span class="posted-time">just now</span>
         </div>
         <div class="add-comment">
           <input type="text" placeholder="Add a comment..." />
