@@ -2,9 +2,11 @@ const mainApp = document.querySelector(".app");
 const firebaseAuthContainer = document.querySelector(
   "#firebaseui-auth-container"
 );
+
+const menuIcon = document.querySelector(".menu-icon");
 const logOutButton = document.querySelector(".logout");
-const createpostElement = document.querySelector(".create-post");
-const uploadButton = document.querySelector(".upload");
+const createpostElement = document.querySelector(".create-post-modal");
+const uploadButton = document.querySelector(".create");
 const instagramButton = document.querySelector(".instagram");
 
 //from app.js
@@ -23,10 +25,10 @@ const progressEl = document.querySelector("#progress");
 
 const postFeed = document.querySelector(".post-feed");
 
+
 let selectedPostId = null;
 let editingPostId = null;
 let editingImageUrl = "";
-
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
@@ -63,6 +65,7 @@ const redirectToAuth = () => {
   createpostElement.style.display = "none";
   firebaseAuthContainer.style.display = "block";
 
+
   ui.start("#firebaseui-auth-container", {
     callbacks: {
       signInSuccessWithAuthResult: (authResult, redirectUrl) => {
@@ -76,7 +79,7 @@ const redirectToAuth = () => {
       },
     },
     // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-    // signInFlow: 'popup',
+    signInFlow: 'popup',
     // signInSuccessUrl: '<url-to-redirect-to-on-success>',
     signInOptions: [
       // Leave the lines as is for the providers you want to offer your users.
@@ -86,6 +89,27 @@ const redirectToAuth = () => {
     //other config options
   });
 };
+
+setTimeout(() => {
+  const firebaseUiList = document.querySelector(".firebaseui-idp-list");
+  if (firebaseUiList) {
+    const p = document.createElement("div");
+    const img = document.createElement("img");
+    img.src = " https://img.icons8.com/3d-fluency/94/instagram-logo.png";
+    img.style.width = "100px";
+    p.textContent = "Instagram";
+    p.style.fontFamily ="cursive"
+    p.style.fontSize ="20px"
+    p.style.padding = "10px";
+    p.style.color = "#fff"
+    firebaseUiList.prepend(p);
+    firebaseUiList.prepend(img);
+  } else {
+    console.warn("Firebase UI list not found yet.");
+  }
+}, 500);
+
+
 
 const redirectToApp = () => {
   mainApp.style.display = "block";
@@ -126,10 +150,15 @@ logOutButton.addEventListener("click", () => {
 });
 
 const createPostHandler = () => {
-  mainApp.style.display = "none";
-  firebaseAuthContainer.style.display = "none";
+  // mainApp.style.display = "none";
+  // firebaseAuthContainer.style.display = "none";
   createpostElement.style.display = "block";
 };
+window.addEventListener("click", (event) => {
+  if (event.target === createpostElement) {
+    createpostElement.style.display = "none";
+  }
+});
 
 uploadButton.addEventListener("click", () => {
   createPostHandler();
@@ -137,6 +166,40 @@ uploadButton.addEventListener("click", () => {
 
 instagramButton.addEventListener("click", () => {
   redirectToApp();
+});
+
+
+const logoutHandler = () => {
+  logOutButton.style.display = "block";
+  
+}
+menuIcon.addEventListener("click", () => {
+  logoutHandler();
+});
+
+const footerLogOut = document.querySelector(".log")
+const footerMenu = document.getElementById("footer-menu")
+const footerLogoutHandler = () => {
+   footerLogOut.style.display = "block";
+
+}
+footerMenu.addEventListener('click', () => {
+  footerLogoutHandler()
+})
+window.addEventListener("click", (event) => {
+  if (event.target === footerLogOut) {
+    footerLogOut.style.display = "none";
+  } else if (!event.target.closest("#footer-menu")) {
+    footerLogOut.style.display = "none";
+  }
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === logOutButton) {
+    logOutButton.style.display = "none";
+  } else if (!event.target.closest(".menu-icon")) {
+    logOutButton.style.display = "none";
+  }
 });
 
 createpostElement.style.display = "flex";
@@ -188,7 +251,7 @@ sendButton.addEventListener("click", () => {
       redirectToApp();
     }
   } else {
-    //  NORMAL UPLOAD 
+    //  NORMAL UPLOAD
     if (files.length === 0) return alert("No file chosen");
 
     for (let i = 0; i < files.length; i++) {
@@ -232,8 +295,6 @@ sendButton.addEventListener("click", () => {
   }
 });
 
-
-
 function resetForm() {
   captionInput.value = "";
   usernameInput.value = "";
@@ -243,7 +304,14 @@ function resetForm() {
   editingPostId = null;
   editingImageUrl = null;
 }
-function generatePostHTML({ imageUrl, caption, username, postId, userId, timestamp }) {
+function generatePostHTML({
+  imageUrl,
+  caption,
+  username,
+  postId,
+  userId,
+  timestamp,
+}) {
   return `
       <div class="post"  data-post-id="${postId}" data-user-id="${userId}">
         <div class="header">
@@ -281,7 +349,7 @@ function generatePostHTML({ imageUrl, caption, username, postId, userId, timesta
           <div class="user-actions">
                       <div class="like-comment-share">
                         <div>
-                          <span class=""
+                          <span class="margin-left-small"
                             ><svg
                               aria-label="Like"
                               class="_8-yf5"
@@ -385,9 +453,7 @@ const renderPosts = () => {
     });
 };
 
-modalButton.addEventListener("click", () => {
-  modal.style.display = "block";
-});
+
 closeButton.addEventListener("click", () => {
   modal.style.display = "none";
 });
@@ -402,17 +468,17 @@ function openModal(postId, userId) {
   selectedPostId = postId;
   const currentUser = firebase.auth().currentUser;
 
-  modalActions.innerHTML= "";
+  modalActions.innerHTML = "";
 
   if (currentUser && currentUser.uid === userId) {
-  const deleteBtn = document.createElement("span");
-  deleteBtn.innerText = "Delete";
-  deleteBtn.classList.add("red-text");
-  deleteBtn.onclick = () => handleDelete(postId);
+    const deleteBtn = document.createElement("span");
+    deleteBtn.innerText = "Delete";
+    deleteBtn.classList.add("red-text");
+    deleteBtn.onclick = () => handleDelete(postId);
 
-  const editBtn = document.createElement("span");
-   editBtn.innerText = "Edit";
-   editBtn.classList.add("red-text");
+    const editBtn = document.createElement("span");
+    editBtn.innerText = "Edit";
+    editBtn.classList.add("red-text");
     editBtn.onclick = () => {
       db.collection("posts")
         .doc(postId)
@@ -482,12 +548,13 @@ function handleDelete(postId) {
 }
 
 function openEditPost(postId, imageUrl, caption) {
-  createPostHandler()
+  createPostHandler();
+  modal.style.display = "none";
   // Pre-filling the form with existing data
   editingPostId = postId;
   editingImageUrl = imageUrl;
- captionInput.value = caption;
-  
+  captionInput.value = caption;
+
   // showing the existing image that needs an update
   const previewEl = document.getElementById("preview-image");
   if (previewEl) {
@@ -517,3 +584,4 @@ function updatePost(postId, imageUrl, caption) {
       alert("Failed to update post.");
     });
 }
+
