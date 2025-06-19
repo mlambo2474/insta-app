@@ -66,6 +66,11 @@ const redirectToAuth = () => {
   firebaseAuthContainer.style.display = "block";
 
 
+//   window.addEventListener("DOMContentLoaded", () => {
+//   const ui = new firebaseui.auth.AuthUI(firebase.auth());
+//   ui.start("#firebaseui-auth-container", uiConfig);
+// });
+
   ui.start("#firebaseui-auth-container", {
     callbacks: {
       signInSuccessWithAuthResult: (authResult, redirectUrl) => {
@@ -90,6 +95,39 @@ const redirectToAuth = () => {
   });
 };
 
+// ...existing code...
+
+// function addInstagramBranding() {
+//   const firebaseUiList = document.querySelector(".firebaseui-idp-list");
+//   if (firebaseUiList && !firebaseUiList.dataset.brandingAdded) {
+//     const p = document.createElement("div");
+//     const img = document.createElement("img");
+//     img.src = "https://img.icons8.com/3d-fluency/94/instagram-logo.png";
+//     img.style.width = "100px";
+//     p.textContent = "Instagram";
+//     p.style.fontFamily = "cursive";
+//     p.style.fontSize = "20px";
+//     p.style.padding = "10px";
+//     p.style.color = "#fff";
+//     p.style.display = "flex";
+//     p.style.justifyContent = "center";
+//     p.style.alignItems = "center";
+//     firebaseUiList.prepend(p);
+//     firebaseUiList.prepend(img);
+//     firebaseUiList.dataset.brandingAdded = "true";
+//   }
+// }
+
+// const observer = new MutationObserver(() => {
+//   addInstagramBranding();
+// });
+
+// observer.observe(document.body, {
+//   childList: true,
+//   subtree: true,
+// });
+
+// ...existing code...
 setTimeout(() => {
   const firebaseUiList = document.querySelector(".firebaseui-idp-list");
   if (firebaseUiList) {
@@ -107,7 +145,7 @@ setTimeout(() => {
   } else {
     console.warn("Firebase UI list not found yet.");
   }
-}, 500);
+}, 200);
 
 
 

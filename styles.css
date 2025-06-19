@@ -386,7 +386,7 @@ main {
   border-radius: 50%;
 }
 .menu-icon {
-  margin-top: 50px;
+  margin-top: 26px;
   cursor: pointer;
   bottom: 0;
 }
@@ -568,12 +568,30 @@ main {
     z-index: 1;
   }
 }
+div.firebase-container.firebaseui-page-provider-sign-in.firebaseui-page-provider-sign-in .firebaseui-use-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:100vw;
+  margin-right: 0;
+
+  
+}
+
+ /* .firebaseui-use-spinner{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+
+ } */
 
 .firebaseui-idp-list {
   background: linear-gradient(#833ab4, #fd1d1d, #fcb045);
-  height: 400px;
+  height: 400px; 
   width: 300px;
-  display: flex;
+  display: flex; 
+  /* height: 100vh;
+  width: 100vw; */
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -583,7 +601,6 @@ main {
 .firebaseui-card-content {
   display: flex;
   flex-direction: column;
-
   width: 300px;
   align-items: center;
   justify-content: center;
@@ -592,3 +609,18 @@ main {
 .firebaseui-list-item .firebaseui-idp-button {
   background-color: green;
 }
+
+
+@media(max-width:748px) {
+   .firebaseui-page-provider-sign-in{
+    display: flex;
+  justify-content:center;
+  align-items: center;
+  margin-left: 100px;
+
+ }
+}
+/* @media(max-width:848px){
+      .firebaseui-page-provider-sign-in{
+ margin-left: 60px;      }
+} */
