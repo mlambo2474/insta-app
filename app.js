@@ -188,8 +188,6 @@ logOutButton.addEventListener("click", () => {
 });
 
 const createPostHandler = () => {
-  // mainApp.style.display = "none";
-  // firebaseAuthContainer.style.display = "none";
   createpostElement.style.display = "block";
 };
 window.addEventListener("click", (event) => {
@@ -240,8 +238,8 @@ window.addEventListener("click", (event) => {
   }
 });
 
-createpostElement.style.display = "flex";
-createpostElement.style.flexDirection = "column";
+// createpostElement.style.display = "flex";
+// createpostElement.style.flexDirection = "column";
 
 let files = [];
 filesEl.addEventListener("change", (e) => {
