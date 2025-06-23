@@ -610,7 +610,14 @@ div.firebase-container.firebaseui-page-provider-sign-in.firebaseui-page-provider
   background-color: green;
 }
 
-
+.userName{
+  font-weight: bold;
+  font-size: 13px;
+}
+.name{
+  color: gray;
+  font-weight: bold;
+}
 @media(max-width:748px) {
    .firebaseui-page-provider-sign-in{
     display: flex;

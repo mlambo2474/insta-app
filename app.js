@@ -65,21 +65,28 @@ const redirectToAuth = () => {
   createpostElement.style.display = "none";
   firebaseAuthContainer.style.display = "block";
 
-
-//   window.addEventListener("DOMContentLoaded", () => {
-//   const ui = new firebaseui.auth.AuthUI(firebase.auth());
-//   ui.start("#firebaseui-auth-container", uiConfig);
-// });
-
   ui.start("#firebaseui-auth-container", {
     callbacks: {
-      signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+      signInSuccessWithAuthResult: async (authResult, redirectUrl) => {
         // User successfully signed in.
-        // Return type determines whether we continue the redirect automatically
-        // or whether we leave that to developer to handle.
+        // Return type determines whether we continue the redirect automatically or whether we leave that to developer to handle.
+        const user = authResult.user;
         console.log("authResult", authResult.user.uid);
-        // this.userId = authResult.user.uid;
-        // this.$authUserText.innerHTML = user.displayName;
+        this.userId = authResult.user.uid;
+        if (!username) {
+        username = prompt("Enter a username:");
+        if (username) {
+          await user.updateProfile({ displayName: username });
+          // Save username to Firestore
+          await db.collection("users").doc(user.uid).set({
+            username: username,
+            email: user.email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        }}
+        this.userId = user.uid;
+        console.log("authResult", user.uid);
+        document.querySelector(".userName").textContent = username;
         redirectToApp();
       },
     },
@@ -93,7 +100,7 @@ const redirectToAuth = () => {
     ],
     //other config options
   });
-};
+}; 
 
 // ...existing code...
 
@@ -149,7 +156,22 @@ setTimeout(() => {
 
 
 
-const redirectToApp = () => {
+const redirectToApp = async () => {
+    const user = firebase.auth().currentUser;
+  if (!user) return;
+  // Fallback username
+  let username = user.displayName;
+  // Try to get from Firestore
+  const docRef = db.collection("users").doc(user.uid);
+  const docSnap = await docRef.get();
+  if (docSnap.exists) {
+    const data = docSnap.data();
+    if (data.username) {
+      username = data.username;
+    }
+  }
+  // Update username in DOM
+  document.querySelector(".userName").textContent = username;
   mainApp.style.display = "block";
   firebaseAuthContainer.style.display = "none";
   createpostElement.style.display = "none";
@@ -249,13 +271,11 @@ filesEl.addEventListener("change", (e) => {
 sendButton.addEventListener("click", () => {
   const user = firebase.auth().currentUser;
   if (!user) return alert("Please log in first.");
-
-  const username = usernameInput.value.trim();
-  const caption = captionInput.value.trim();
-
-  if (editingPostId) {
+   const username = usernameInput.value.trim();
+   const caption = captionInput.value.trim();
+      if (editingPostId) {
     //  EDIT MODE First
-    if (files.length > 0) {
+     if (files.length > 0) {
       const file = files[0];
       const uniquePath = `posts/${user.uid}/${Date.now()}-${file.name}`;
       const fileRef = storage.ref(uniquePath);
@@ -600,6 +620,7 @@ function openEditPost(postId, imageUrl, caption) {
 }
 
 function updatePost(postId, imageUrl, caption) {
+  
   db.collection("posts")
     .doc(postId)
     .update({
