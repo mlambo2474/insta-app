@@ -4,6 +4,7 @@ const firebaseAuthContainer = document.querySelector(
 );
 
 const menuIcon = document.querySelector(".menu-icon");
+const loggingOutModal = document.querySelector(".logging-out")
 const logOutButton = document.querySelector(".logout");
 const createpostElement = document.querySelector(".create-post-modal");
 const uploadButton = document.querySelector(".create");
@@ -13,7 +14,7 @@ const instagramButton = document.querySelector(".instagram");
 const filesEl = document.querySelector("#files");
 const sendButton = document.querySelector("#send");
 const uploading = document.querySelector("#uploading");
-const usernameInput = document.getElementById("username");
+// const usernameInput = document.getElementById("username");
 const captionInput = document.getElementById("caption");
 
 const modalButton = document.querySelector(".modal-button");
@@ -228,9 +229,15 @@ instagramButton.addEventListener("click", () => {
 
 
 const logoutHandler = () => {
-  logOutButton.style.display = "block";
-  
+  loggingOutModal.style.display = "block"; 
 }
+// window.addEventListener("click", (event) => {
+//   if (event.target === loggingOutModal) {
+//    loggingOutModal.style.display = "none";
+//   } else if (!event.target.closest(".logging-out")) {
+//     loggingOutModal.style.display = "none";
+//   }
+// });
 menuIcon.addEventListener("click", () => {
   logoutHandler();
 });
@@ -253,10 +260,10 @@ window.addEventListener("click", (event) => {
 });
 
 window.addEventListener("click", (event) => {
-  if (event.target === logOutButton) {
-    logOutButton.style.display = "none";
+  if (event.target === loggingOutModal) {
+    loggingOutModal.style.display = "none";
   } else if (!event.target.closest(".menu-icon")) {
-    logOutButton.style.display = "none";
+    loggingOutModal.style.display = "none";
   }
 });
 
@@ -271,11 +278,12 @@ filesEl.addEventListener("change", (e) => {
 sendButton.addEventListener("click", () => {
   const user = firebase.auth().currentUser;
   if (!user) return alert("Please log in first.");
-   const username = usernameInput.value.trim();
-   const caption = captionInput.value.trim();
-      if (editingPostId) {
-    //  EDIT MODE First
-     if (files.length > 0) {
+
+  const caption = captionInput.value.trim();
+
+  if (editingPostId) {
+    //  EDIT MODE
+    if (files.length > 0) {
       const file = files[0];
       const uniquePath = `posts/${user.uid}/${Date.now()}-${file.name}`;
       const fileRef = storage.ref(uniquePath);
@@ -284,8 +292,7 @@ sendButton.addEventListener("click", () => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const percentage =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           progressEl.value = percentage;
         },
         (error) => {
@@ -307,21 +314,19 @@ sendButton.addEventListener("click", () => {
       redirectToApp();
     }
   } else {
-    //  NORMAL UPLOAD
+    // NORMAL UPLOAD
     if (files.length === 0) return alert("No file chosen");
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const uniquePath = `posts/${user.uid}/${Date.now()}-${file.name}`;
       const fileRef = storage.ref(uniquePath);
-
       const uploadTask = fileRef.put(file);
 
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const percentage =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           progressEl.value = percentage;
         },
         (error) => {
@@ -330,20 +335,24 @@ sendButton.addEventListener("click", () => {
         },
         () => {
           fileRef.getDownloadURL().then((downloadURL) => {
-            db.collection("posts")
-              .add({
-                userId: user.uid,
-                username: username,
-                imageUrl: downloadURL,
-                caption: caption,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-              })
-              .then(() => {
-                renderPosts();
-                uploading.innerHTML += `${file.name} uploaded and saved!<br>`;
-                resetForm();
-                redirectToApp();
-              });
+            db.collection("users").doc(user.uid).get().then((doc) => {
+              const username = doc.exists && doc.data().username ? doc.data().username : "anonymous";
+
+              db.collection("posts")
+                .add({
+                  userId: user.uid,
+                  username: username,
+                  imageUrl: downloadURL,
+                  caption: caption,
+                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+                .then(() => {
+                  renderPosts();
+                  uploading.innerHTML += `${file.name} uploaded and saved!<br>`;
+                  resetForm();
+                  redirectToApp();
+                });
+            });
           });
         }
       );
@@ -351,9 +360,10 @@ sendButton.addEventListener("click", () => {
   }
 });
 
+
 function resetForm() {
   captionInput.value = "";
-  usernameInput.value = "";
+  // usernameInput.value = "";
   filesEl.value = "";
   progressEl.value = 0;
   files = [];
@@ -612,11 +622,11 @@ function openEditPost(postId, imageUrl, caption) {
   captionInput.value = caption;
 
   // showing the existing image that needs an update
-  const previewEl = document.getElementById("preview-image");
-  if (previewEl) {
-    previewEl.src = imageUrl;
-    previewEl.style.display = "block";
-  }
+  // const previewEl = document.getElementById("preview-image");
+  // if (previewEl) {
+  //   previewEl.src = imageUrl;
+  //   previewEl.style.display = "block";
+  // }
 }
 
 function updatePost(postId, imageUrl, caption) {

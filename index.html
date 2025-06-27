@@ -7,7 +7,6 @@
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     />
@@ -37,30 +36,28 @@
 
   <body>
     <div id="firebaseui-auth-container"></div>
-   
-    
 
     <div class="create-post-modal">
       <div class="post-modal-content">
         <p>Create a new post</p>
         <label for="input">Upload your image or video here</label>
         <input type="file" id="files" class="choose-file input" multiple />
-        <input
+        <!-- <input
           type="text"
           placeholder="username"
           class="username post-username"
           id="username"
-        />
+        /> -->
         <textarea
           name="caption"
           placeholder="caption"
           class="post-caption"
           id="caption"
-          maxlength="200"
+          maxlength="300"
         ></textarea>
-        <div class="preview-image">
+        <!-- <div class="preview-image">
           <img id="preview-image" width="50px" height="50px" src="" />
-        </div>
+        </div> -->
         <p id="uploading" class="progress"></p>
         <progress class="progress" max="100" id="progress"></progress>
         <div class="post-buttons">
@@ -173,9 +170,15 @@
                 <div class="sidebar-items menu-icon">
                   <span class="material-icons"> menu </span>
                   <span class="sidebar-text">More</span>
-                  <div class="logout">
-                    <p>Logout</p>
-                    <p>Settings</p>
+
+                  <div class="logging-out">
+                    <div class="logout-content">
+                      <p class="logout" onclick="handleLogout()">Logout</p>
+                      <p class="item">Settings</p>
+                      <p class="item">Monetize</p>
+                      <p class="item">Invite a friend</p>
+                      <p class="item">Link with Facebook</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -332,14 +335,21 @@
                       /></span>
                     </div>
 
-                    <div class="footer-items" >
-                      <span  class="material-icons" id="footer-menu">
+                    <div class="footer-items">
+                      <span class="material-icons" id="footer-menu">
                         menu
                       </span>
                       <div class="log">
-                    <p onclick="handleLogout()">Logout</p>
-                    <p>Settings</p>
-                  </div>
+                        <!-- <p onclick="handleLogout()">Logout</p>
+                        <p>Settings</p> -->
+                          <div class="logout-content">
+                      <p class="logout" onclick="handleLogout()">Logout</p>
+                      <p class="item">Settings</p>
+                      <p class="item">Monetize</p>
+                      <p class="item">Invite a friend</p>
+                      <p class="item">Link with Facebook</p>
+                    </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -466,7 +476,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="app.js"></script>
-  
 
     <!-- <script type="module">
      // Import the functions you need from the SDKs you need

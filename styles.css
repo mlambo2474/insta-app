@@ -431,14 +431,28 @@ main {
   color: gray;
   padding: 0 4px;
 }
-.progress {
-  color: white;
+progress.progress {
+  width: 100%;
+  height: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  
+}
+
+progress.progress::-webkit-progress-bar {
+  background-color: rgb(233, 223, 223); /* background color */
+  border-radius: 10px;
+}
+
+progress.progress::-webkit-progress-value {
+  background-color: green; /* progress fill */
+  border-radius: 10px;
 }
 .post-buttons {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   padding: 10px;
 }
 .post-username {
@@ -482,16 +496,43 @@ main {
 .menu-icon {
   position: relative;
 }
-.logout {
-  background: rgb(197, 197, 197);
-  color: rgb(0, 0, 0);
-  font-size: 16px;
-  padding: 5px 30px;
-  border-radius: 12px;
-  bottom: 40px;
-  position: absolute;
-  display: none;
-  z-index: 1;
+.logging-out {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100vh; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+
+}
+.logout-content{
+    background-color: #fff;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px 8px;
+  border: 1px solid #dbdbdb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px; /* Could be more or less, depending on screen size */
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  color:gray;
+}
+.logout-content p{
+  border-bottom: 1px solid rgb(224, 224, 224);
+  width: 100%;
+}
+.logout{
+  color:red;
+}
+.item:hover{
+  color: rgb(12, 12, 12);
 }
 
 .mobile-footer {
@@ -515,7 +556,7 @@ main {
   font-weight: bold;
 }
 .footer-items:hover {
-  background-color: #ebedf0;
+  background-color: #d3d5d8;
   border-radius: 15px;
 }
 .footer-items img {
@@ -556,17 +597,34 @@ main {
     position: relative;
   }
   .log {
-    background: rgb(197, 197, 197);
+     display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100vh; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+    /* background: rgb(197, 197, 197);
     color: rgb(0, 0, 0);
     font-size: 16px;
     padding: 5px 30px;
     border-radius: 12px;
-    bottom: 60px;
+  bottom: 0;
     right: 10px;
     position: absolute;
     display: none;
-    z-index: 1;
+    z-index: 1; */
   }
+     .firebaseui-page-provider-sign-in{
+    display: flex;
+  justify-content:center;
+  align-items: center;
+  margin-left: 100px;
+
+ }
 }
 div.firebase-container.firebaseui-page-provider-sign-in.firebaseui-page-provider-sign-in .firebaseui-use-spinner {
   display: flex;
@@ -619,13 +677,7 @@ div.firebase-container.firebaseui-page-provider-sign-in.firebaseui-page-provider
   font-weight: bold;
 }
 @media(max-width:748px) {
-   .firebaseui-page-provider-sign-in{
-    display: flex;
-  justify-content:center;
-  align-items: center;
-  margin-left: 100px;
 
- }
 }
 /* @media(max-width:848px){
       .firebaseui-page-provider-sign-in{
